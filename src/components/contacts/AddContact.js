@@ -41,6 +41,8 @@ class AddContact extends Component {
          phone: '',
          errors: {}
      })
+
+     this.props.history.push("/")
  }
  onChangeData = (e) => {
     this.setState({[ e.target.name ]: e.target.value})
