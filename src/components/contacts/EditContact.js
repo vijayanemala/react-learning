@@ -4,12 +4,23 @@ import uuid from 'uuid';
 import TextInputGroup from '../layout/TextInputGroup';
 import axios from 'axios';
 
-class AddContact extends Component {
+class EditContact extends Component {
  state = {
      name: '',
      email: '',
      phone: '',
      errors: {}
+ }
+ async componentDidMount() {
+     const { id } = this.props.match.params;
+    const resData = await axios
+            .get(`https://jsonplaceholder.typicode.com/users/${id}`)
+    const contact = resData.data;
+    this.setState({
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone
+    });
  }
  onSubmitData = async (dispatch,e) => {
      e.preventDefault();
@@ -28,16 +39,18 @@ class AddContact extends Component {
         this.setState({errors: {phone:'phone number is required'}});
         return;
     }
-     const newContact = {
+
+    const {id} = this.props.match.params;
+
+    const updateContact = {
         name,
         email,
-        phone
-     }
+        phone,
+    }
+    const resData = await axios
+        .put(`https://jsonplaceholder.typicode.com/users/${id}`,updateContact);
 
-     const res = await axios
-     .post('https://jsonplaceholder.typicode.com/users', newContact);
-     dispatch({type:'Add_CONTACT', payload:res.data});
-     // dispatch({type:'Add_CONTACT', payload:newContact})
+    dispatch({type:'UPDATE_CONTACT', payload:resData.data});
      // clear state
      this.setState({
          name:'',
@@ -59,7 +72,7 @@ class AddContact extends Component {
                 const { dispatch } = value;
                   return (
                     <div className="card md-3">
-                    <div className="card-header">Add Contact</div>
+                    <div className="card-header">Edit Contact</div>
                     <div className="card-body">
                         <form onSubmit={this.onSubmitData.bind(this,dispatch)}>
                             <TextInputGroup label="Name"
@@ -87,7 +100,7 @@ class AddContact extends Component {
                                         placeholder="Enter phone number..">
                             </TextInputGroup>
                             <input type="submit"
-                                    value="Add Contact"
+                                    value="Update Contact"
                                     className="btn btn-light btn-block" />
                         </form>
                     </div>
@@ -98,4 +111,4 @@ class AddContact extends Component {
       );
   }
 }
-export default AddContact;
+export default EditContact;

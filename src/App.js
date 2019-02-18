@@ -7,8 +7,10 @@ import { Provider } from './context';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Contacts from './components/contacts/Contacts';
 import AddContact from './components/contacts/AddContact'
+import EditContact from './components/contacts/EditContact'
 import About from './components/pages/About';
 import NotFound from './components/pages/NotFound';
+import Test from './components/test/Test';
 
 
 class App extends Component {
@@ -26,6 +28,10 @@ class App extends Component {
                   component={AddContact} />
                 <Route exact path="/about/:id"
                   component={About} />
+                <Route exact path="/contact/edit/:id"
+                  component={EditContact} />
+                <Route exact path="/test"
+                  component={Test} />
                 <Route component={NotFound} />
               </Switch>
             </div>
